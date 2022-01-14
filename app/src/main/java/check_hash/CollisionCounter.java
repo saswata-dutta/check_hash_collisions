@@ -1,31 +1,27 @@
 package check_hash;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class CollisionCounter {
-    private final HashMap<Long, MutableInt> counts;
+    private final ConcurrentHashMap<Long, Integer> counts;
 
     public CollisionCounter() {
-        this.counts = new HashMap<>();
+        this.counts = new ConcurrentHashMap<>();
     }
 
-    synchronized public void accumulate(final HashMap<Long, MutableInt> other) {
+    public void accumulate(final HashMap<Long, Integer> other) {
         for (Long key : other.keySet()) {
-            MutableInt value = other.get(key);
+            Integer value = other.get(key);
 
-            MutableInt count = counts.get(key);
-            if (count == null) {
-                counts.put(key, value);
-            } else {
-                count.increment(value.value);
-            }
+            counts.merge(key, value, Integer::sum);
         }
     }
 
     public void report() {
-        for (MutableInt v : counts.values()) {
-            if (v.value > 1) {
-                System.out.println(v.value);
+        for (Integer v : counts.values()) {
+            if (v > 1) {
+                System.out.println(v);
             }
         }
     }

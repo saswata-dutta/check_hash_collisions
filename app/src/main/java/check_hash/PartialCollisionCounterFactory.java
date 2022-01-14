@@ -11,7 +11,7 @@ public class PartialCollisionCounterFactory {
         this.collisionCounter = collisionCounter;
     }
 
-    public PartialCollisionCounter create(final String[] buffer) {
-        return new PartialCollisionCounter(buffer, hf, collisionCounter);
+    public PartialCollisionCounter create(final String[] buffer, final int size) {
+        return new PartialCollisionCounter(buffer, size, hf, collisionCounter);
     }
 }

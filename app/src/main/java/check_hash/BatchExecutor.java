@@ -41,7 +41,7 @@ public class BatchExecutor implements AutoCloseable {
     private void execute() {
         if (count < 1) return;
 
-        executorService.submit(partialCollisionCounterFactory.create(batch));
+        executorService.submit(partialCollisionCounterFactory.create(batch, count));
         batch = new String[BATCH_SIZE];
         count = 0;
     }
