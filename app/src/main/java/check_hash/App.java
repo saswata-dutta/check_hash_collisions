@@ -3,12 +3,39 @@
  */
 package check_hash;
 
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Stream;
+
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
+
+    final static int BATCH_SIZE = 10_000;
+    final static int POOL_SIZE = 6;
+
+    static void process(
+            String location, PartialCollisionCounterFactory partialCollisionCounterFactory) {
+
+        try (Stream<String> in = Files.lines(Paths.get(location));
+             BatchExecutor batchExecutor = new BatchExecutor(BATCH_SIZE, POOL_SIZE, partialCollisionCounterFactory)) {
+
+            in.forEach(line -> batchExecutor.submit(line.trim()));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        final String location = args[0];
+        final HashFunction hf = Hashing.sipHash24(100000089733L, 100000089743L);
+        final CollisionCounter collisionCounter = new CollisionCounter();
+        final PartialCollisionCounterFactory partialCollisionCounterFactory =
+                new PartialCollisionCounterFactory(hf, collisionCounter);
+
+        process(location, partialCollisionCounterFactory);
+        collisionCounter.report();
     }
 }
