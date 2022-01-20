@@ -6,9 +6,11 @@ package check_hash;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
 
+import java.math.BigInteger;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
+
 
 public class App {
 
@@ -30,7 +32,9 @@ public class App {
 
     public static void main(String[] args) {
         final String location = args[0];
-        final HashFunction hf = Hashing.sipHash24(100000089733L, 100000089743L);
+        final String key =
+                "a2d777d888734e10c60ed022a8fb28389da928d179f94c746139c9d059e3297ad4d8a11bda91df58d5de4af237e6070392e68548b0c08a75f9f4b0202d99b199eab742cb80dc3678eb6609d3204e9d5f3d7b0bd6b11267c8e1c13153a307c9c2c6315d2c5573b0f1b5b4fa6325bf22893ab5c87c5a8b60dd36e08724e11570e0790736f7d97ab0f60e5f58c94408428114cff8c5ee4f1550a7993d69dc6adbacb24e9a3bf0b89a5609bc31d1ed4a957cb80370662d3240a69f55d6a83f8cd81290686ca61380922802404b9a035e1b3def3aa40e2f30675b055ca40dfc38b3336e292dd8b9f4b171bf4c02e5c065cac947b8532f2a6503a4b0340ea7ec7dc757";
+        final HashFunction hf = Hashing.hmacSha256(new BigInteger(key, 16).toByteArray());
         final CollisionCounter collisionCounter = new CollisionCounter();
         final PartialCollisionCounterFactory partialCollisionCounterFactory =
                 new PartialCollisionCounterFactory(hf, collisionCounter);

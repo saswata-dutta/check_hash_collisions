@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class CollisionCounter {
-    private final ConcurrentHashMap<Long, Integer> counts;
+    private final ConcurrentHashMap<String, Integer> counts;
 
     public CollisionCounter() {
         this.counts = new ConcurrentHashMap<>();
     }
 
-    public void accumulate(final HashMap<Long, Integer> other) {
-        for (Long key : other.keySet()) {
+    public void accumulate(final HashMap<String, Integer> other) {
+        for (String key : other.keySet()) {
             Integer value = other.get(key);
 
             counts.merge(key, value, Integer::sum);
