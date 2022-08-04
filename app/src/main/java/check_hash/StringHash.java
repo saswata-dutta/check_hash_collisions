@@ -37,11 +37,12 @@ public class StringHash {
                                 String prefix,
                                 Map<Integer, Integer> counter,
                                 HashFunction hf) {
-        int hash = Math.abs(hf.newHasher().putString(line, Charsets.UTF_8).hash().asInt());
+        int hash = hf.newHasher().putString(line, Charsets.UTF_8).hash().asInt();
+        System.out.println(hash);
 
         int len = 9 - prefix.length();
         String keyStr = prefix +
-                Strings.padStart(String.valueOf(hash), len, '0').
+                Strings.padStart(String.valueOf(Math.abs(hash)), len, '0').
                         substring(0, len);
         int key = Integer.parseInt(keyStr);
         counter.merge(key, 1, Integer::sum);

@@ -23,6 +23,8 @@ dependencies {
 
     // This dependency is used by the application.
     implementation("com.google.guava:guava:31.0.1-jre")
+    implementation 'com.esotericsoftware:kryo:4.0.0'
+    implementation 'com.google.code.gson:gson:2.9.1'
 }
 
 application {
